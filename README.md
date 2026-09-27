@@ -1,30 +1,85 @@
-# Earth-Moon System
+# Earth–Moon System — Interactive 3D Visualization
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+An interactive 3D visualization of the Earth–Moon system built with React Three Fiber. Rendered as a real-time WebGL scene, it shows Earth and the Moon orbiting together with animated organic-gradient shaders, a starfield backdrop, and an adjustable simulation speed control.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/gileb64375-5584s-projects/v0-earth-moon-system)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/oqjURd4AUBN)
+## What it does
 
-## Overview
+- Renders a stylized **Earth–Moon orbital system** in 3D (WebGL via Three.js).
+- The Moon orbits Earth continuously; both bodies are wrapped in custom GLSL noise shaders that animate over time (organic gradient effect).
+- **Simulation speed slider** to speed up / slow down the orbital animation.
+- **Wireframe ↔ solid view toggle** for an "x-ray" look at the geometry.
+- Free camera: rotate / zoom / pan with OrbitControls.
+- Collapsible info panel explaining the scene.
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## Features
 
-## Deployment
+- Real-time 3D scene: `Canvas`, `OrbitControls`, `Stars` from `@react-three/drei`
+- Custom vertex + fragment shaders (simplex noise) driving an animated surface gradient
+- Speed control slider for the orbital animation
+- Wireframe / solid mesh toggle
+- Responsive full-screen layout with dark space aesthetic
+- shadcn/ui component set (Slider, Button, Collapsible)
 
-Your project is live at:
+## Tech stack
 
-**[https://vercel.com/gileb64375-5584s-projects/v0-earth-moon-system](https://vercel.com/gileb64375-5584s-projects/v0-earth-moon-system)**
+| Layer        | Technology                                    |
+|--------------|-----------------------------------------------|
+| Framework    | Next.js 15.2.4 (App Router)                   |
+| UI library   | React 19                                      |
+| 3D           | Three.js, `@react-three/fiber`, `@react-three/drei` |
+| Styling      | Tailwind CSS 3.4, `tailwindcss-animate`       |
+| Components   | Radix UI + shadcn/ui                          |
+| Fonts        | Geist (via `geist` package)                   |
+| Analytics    | `@vercel/analytics`                           |
+| Language     | TypeScript                                    |
 
-## Build your app
+## Quick start
 
-Continue building your app on:
+```bash
+npm install --legacy-peer-deps   # peer conflicts from "latest"-pinned 3D deps
+npm run dev                      # http://localhost:3000
+```
 
-**[https://v0.app/chat/projects/oqjURd4AUBN](https://v0.app/chat/projects/oqjURd4AUBN)**
+Production build:
 
-## How It Works
+```bash
+npm run build
+npm run start                    # serves the production build
+```
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+## Project structure
+
+```
+.
+├── app/
+│   ├── page.tsx          # entry page — renders the scene component
+│   ├── layout.tsx        # root layout (fonts, theme provider)
+│   └── globals.css       # global styles
+├── earth-moon-system.tsx # the full 3D scene (shaders, orbit, controls, UI)
+├── components/
+│   ├── theme-provider.tsx
+│   └── ui/               # shadcn/ui primitives (slider, button, collapsible…)
+├── lib/utils.ts          # cn() helper
+├── public/               # static assets / placeholders
+├── styles/globals.css    # legacy global styles
+├── next.config.mjs       # `output: "export"` + unoptimized images
+└── tailwind.config.ts
+```
+
+The scene lives almost entirely in `earth-moon-system.tsx`: scene setup, GLSL shaders, orbital animation loop, and the control UI.
+
+## Environment variables
+
+None required.
+
+## Deployment notes
+
+- The app is **fully static** — no API routes, no server actions, no secrets. It can be served from any static host.
+- `next.config.mjs` sets `output: "export"` and `images.unoptimized: true`, so `npm run build` emits a static site in `out/`.
+- This repo is deployed to GitHub Pages: https://girishlade111.github.io/earth-moon-system/
+- Note: `basePath: "/earth-moon-system"` is set so assets resolve correctly under the GitHub Pages subpath. If you deploy this to a custom domain / Vercel at the domain root instead, remove `basePath` from `next.config.mjs`.
+- `expo` / `react-native` entries in `package.json` are leftovers from the v0 template and are not used by the web build.
+
+---
+
+Built by Girish Lade · [ladestack.in](https://ladestack.in)
